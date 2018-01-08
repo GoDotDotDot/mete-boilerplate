@@ -3,13 +3,17 @@ language: node_js
 node_js:
   - 8
 
+install:
+  - brew install ccache
+  - brew install libpng
+  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
+
 script:
-  - yarn add -D cross-env
   - npm run build:dll
   - npm run build
 
 before_install:
-  - brew install libpng
+  - yarn global add cross-env webpack
 
 notifications:
   email:
