@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const workPath = process.cwd()
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
   entry: [
@@ -18,7 +19,9 @@ module.exports = require('./webpack.base.babel')({
 
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['build'], {
+      root: workPath
+    }),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
