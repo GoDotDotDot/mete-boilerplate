@@ -13,7 +13,7 @@ script:
   - npm run build
 
 before_install:
-  - yarn global add cross-env webpack
+  - yarn global add cross-env
 
 notifications:
   email:
@@ -25,4 +25,6 @@ cache:
   yarn: true
   directories:
     - node_modules
+    - $HOME/Library/Caches/Homebrew
+
 os: osx
