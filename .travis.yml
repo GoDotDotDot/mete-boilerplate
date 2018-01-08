@@ -6,7 +6,7 @@ node_js:
 install:
   - brew install ccache
   - brew install libpng
-  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
+#  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
 
 script:
   - npm run build
