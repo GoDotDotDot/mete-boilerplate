@@ -2,53 +2,153 @@
  * COMMON WEBPACK CONFIGURATION
  */
 
-const path = require('path');
-const webpack = require('webpack');
-
+const path = require('path')
+const fs = require('fs')
+const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
 // see https://github.com/webpack/loader-utils/issues/56 parseQuery() will be replaced with getOptions()
 // in the next major version of loader-utils.'
-process.noDeprecation = true;
+process.noDeprecation = true
+
+const workingPath = process.cwd()
+const lessToJs = require('less-vars-to-js')
+const themeVariables = lessToJs(fs.readFileSync(path.resolve(workingPath, 'app/theme.less'), 'utf8'))
 
 module.exports = (options) => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
-    path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/',
+    path: path.resolve(workingPath, 'build'),
+    publicPath: '/'
   }, options.output), // Merge with env dependent settings
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
-        exclude: /node_modules/,
+        test: /\.(js|jsx)$/, // Transform all .js files required somewhere with Babel
+        exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options: options.babelQuery,
-        },
+          options:
+          Object.assign({
+            presets: [['es2015', { 'modules': false }], 'react', 'stage-0'],
+            cacheDirectory: true,
+          // Since babel-plugin-transform-runtime includes a polyfill that includes a custom regenerator runtime and core.js, the following usual shimming method using webpack.ProvidePlugin will not work:
+            plugins: [
+              ['import', { libraryName: 'antd', style: true }] // `style: true` 会加载 less 文件
+            ]
+          }, options.babelQuery)
+        }
       },
       {
-        // Preprocess our own .css files
-        // This is the place to add your own loaders (e.g. sass/less etc.)
-        // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader'],
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
+            options: {
+              minimize: options.isProd
+            }}, 'postcss-loader'],
+          publicPath: '/'
+        })
       },
       {
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
         include: /node_modules/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
+       // scss loader
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          publicPath: '/',
+          fallback: 'style-loader',
+          use: [
+            // {loader: 'autoprefixer-loader'},
+
+            {
+              loader: 'css-loader',
+              options: {
+                // module: true, // css-loader 0.14.5 compatible
+                // modules: true
+                // localIdentName: '[hash:base64:5]'
+                // importLoaders: 1,
+                minimize: options.isProd
+              }
+            },
+            {
+              loader: 'postcss-loader'
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                // outputStyle: 'collapsed',
+                sourceMap: true,
+                includePaths: [path.resolve(workingPath, 'app')]
+              }
+            }
+          ]
+        })
+      },
+      // less loader
+      {
+        test: /\.less$/,
+        use: ExtractTextPlugin.extract({
+          publicPath: '/',
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+              // module: true, // css-loader 0.14.5 compatible
+              // modules: true
+              // localIdentName: '[hash:base64:5]'
+              // importLoaders: 1,
+                minimize: options.isProd
+              }
+            },
+            {
+              loader: 'postcss-loader'
+            },
+            {
+              loader: 'less-loader',
+              options: {
+          // outputStyle: 'collapsed',
+                modifyVars: themeVariables,
+                sourceMap: true,
+                includePaths: [path.resolve(workingPath, 'app')]
+              }
+            }
+          ]
+        })
+      },
+      // {
+      //   // Preprocess 3rd party .css files located in node_modules
+      //   test: /\.css$/,
+      //   include: /node_modules/,
+      //   use: ['style-loader', 'css-loader']
+      // },
       {
         test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
-        use: 'file-loader',
+        loader: 'url-loader?limit=8024&name=assets/fonts/[name].[ext]',
+        options: {
+          publicPath: '/'
+        }
       },
       {
-        test: /\.(jpg|png|gif)$/,
+        test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader',
+          {
+            loader: 'url-loader?limit=8024&name=assets/images/[name]-[hash].[ext]',
+            options: {
+              publicPath: '/'
+            }
+          },
+          // 'file-loader',
+
           {
             loader: 'image-webpack-loader',
             options: {
@@ -57,35 +157,35 @@ module.exports = (options) => ({
               interlaced: false,
               pngquant: {
                 quality: '65-90',
-                speed: 4,
-              },
-            },
-          },
-        ],
+                speed: 4
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.html$/,
-        use: 'html-loader',
+        use: 'html-loader'
       },
       {
         test: /\.json$/,
-        use: 'json-loader',
+        use: 'json-loader'
       },
       {
         test: /\.(mp4|webm)$/,
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
-          },
-        },
-      },
-    ],
+            limit: 10000
+          }
+        }
+      }
+    ]
   },
   plugins: options.plugins.concat([
     new webpack.ProvidePlugin({
       // make fetch available
-      fetch: 'exports-loader?self.fetch!whatwg-fetch',
+      fetch: 'exports-loader?self.fetch!whatwg-fetch'
     }),
 
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
@@ -93,25 +193,25 @@ module.exports = (options) => ({
     // drop any unreachable code.
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
     }),
-    new webpack.NamedModulesPlugin(),
+    new webpack.NamedModulesPlugin()
   ]),
   resolve: {
     modules: ['app', 'node_modules'],
     extensions: [
       '.js',
       '.jsx',
-      '.react.js',
+      '.react.js'
     ],
     mainFields: [
       'browser',
       'jsnext:main',
-      'main',
-    ],
+      'main'
+    ]
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: options.performance || {},
-});
+  performance: options.performance || {}
+})

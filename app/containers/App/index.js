@@ -6,16 +6,17 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React from 'react';
-import { Helmet } from 'react-helmet';
-import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react'
+import { Helmet } from 'react-helmet'
+import styled from 'styled-components'
+import { Switch, Route } from 'react-router-dom'
 
-import HomePage from 'containers/HomePage/Loadable';
-import FeaturePage from 'containers/FeaturePage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Header from 'components/Header';
-import Footer from 'components/Footer';
+import nav from '../../common/nav'
+// import HomePage from 'containers/HomePage/Loadable'
+// import FeaturePage from 'containers/FeaturePage/Loadable'
+import NotFoundPage from 'containers/NotFoundPage/Loadable'
+import Header from 'components/Header'
+import Footer from 'components/Footer'
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -24,24 +25,40 @@ const AppWrapper = styled.div`
   min-height: 100%;
   padding: 0 16px;
   flex-direction: column;
-`;
+`
 
-export default function App() {
+const getRoute = nav => {
+  return nav.map(ele => {
+    if (ele.child) {
+      return this.getRoute(ele.child)
+    }
+    if (ele.component) {
+      return (
+        <Route
+          key={ele.route}
+          exact
+          path={ele.route}
+          component={ele.component}
+        />
+      )
+    }
+  })
+}
+export default function App () {
   return (
     <AppWrapper>
       <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
+        titleTemplate='%s - React.js Boilerplate'
+        defaultTitle='React.js Boilerplate'
       >
-        <meta name="description" content="A React.js Boilerplate application" />
+        <meta name='description' content='A React.js Boilerplate application' />
       </Helmet>
       <Header />
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="" component={NotFoundPage} />
+        {getRoute(nav)}
+        <Route path='' component={NotFoundPage} />
       </Switch>
       <Footer />
     </AppWrapper>
-  );
+  )
 }

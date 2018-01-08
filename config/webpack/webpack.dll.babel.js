@@ -8,16 +8,16 @@
  * the webpack process.
  */
 
-const { join } = require('path');
-const defaults = require('lodash/defaultsDeep');
-const webpack = require('webpack');
-const pkg = require(join(process.cwd(), 'package.json'));
-const dllPlugin = require('../config').dllPlugin;
+const { join } = require('path')
+const defaults = require('lodash/defaultsDeep')
+const webpack = require('webpack')
+const pkg = require(join(process.cwd(), 'package.json'))
+const dllPlugin = require('../../config').dllPlugin
 
-if (!pkg.dllPlugin) { process.exit(0); }
+if (!pkg.dllPlugin) { process.exit(0) }
 
-const dllConfig = defaults(pkg.dllPlugin, dllPlugin.defaults);
-const outputPath = join(process.cwd(), dllConfig.path);
+const dllConfig = defaults(pkg.dllPlugin, dllPlugin.defaults)
+const outputPath = join(process.cwd(), dllConfig.path)
 
 module.exports = require('./webpack.base.babel')({
   context: process.cwd(),
@@ -26,15 +26,24 @@ module.exports = require('./webpack.base.babel')({
   output: {
     filename: '[name].dll.js',
     path: outputPath,
-    library: '[name]',
+    // The name of the global variable which the library's
+    // require() function will be assigned to
+    library: '[name]'
   },
   plugins: [
     new webpack.DllPlugin({
-      name: '[name]',
-      path: join(outputPath, '[name].json'),
-    }),
+      context: __dirname,
+      // The path to the manifest file which maps between
+      // modules included in a bundle and the internal IDs
+      // within that bundle
+      path: join(process.cwd(), 'dll/[name]_manifest.json'),
+      // The name of the global variable which the library's
+      // require function has been assigned to. This must match the
+      // output.library option above
+      name: '[name]'
+    })
   ],
   performance: {
-    hints: false,
-  },
-});
+    hints: false
+  }
+})
