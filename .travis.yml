@@ -4,6 +4,7 @@ node_js:
   - 8
 
 script:
+  - yarn add -D cross-env
   - npm run build:dll
   - npm run build
 
