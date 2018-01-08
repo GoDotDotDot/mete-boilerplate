@@ -9,7 +9,6 @@ install:
   - export PATH="/usr/local/opt/ccache/libexec:$PATH"
 
 script:
-  - npm run build:dll
   - npm run build
 
 before_install:
