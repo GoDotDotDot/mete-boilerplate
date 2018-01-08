@@ -12,7 +12,7 @@ script:
   - npm run build
 
 before_install:
-  - yarn global add cross-env
+  - yarn global add cross-env@5.0.5
 
 notifications:
   email:
