@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
+    "build": "NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "dev": "cross-env NODE_ENV=development node server",
     "build:dll": "cross-env node ./scripts/dll.js"
   },
