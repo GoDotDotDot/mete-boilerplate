@@ -17,6 +17,7 @@ const lessToJs = require('less-vars-to-js')
 const themeVariables = lessToJs(fs.readFileSync(path.resolve(workingPath, 'app/theme.less'), 'utf8'))
 
 module.exports = (options) => ({
+  // entry: ['babel-polyfill', ...options.entry],
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
     path: path.resolve(workingPath, 'build'),
@@ -68,7 +69,6 @@ module.exports = (options) => ({
           fallback: 'style-loader',
           use: [
             // {loader: 'autoprefixer-loader'},
-
             {
               loader: 'css-loader',
               options: {
@@ -87,7 +87,7 @@ module.exports = (options) => ({
               options: {
                 // outputStyle: 'collapsed',
                 sourceMap: true,
-                includePaths: [path.resolve(workingPath, 'app')]
+                includePaths: ['app']
               }
             }
           ]
@@ -116,7 +116,7 @@ module.exports = (options) => ({
             {
               loader: 'less-loader',
               options: {
-          // outputStyle: 'collapsed',
+              // outputStyle: 'collapsed',
                 modifyVars: themeVariables,
                 sourceMap: true,
                 includePaths: [path.resolve(workingPath, 'app')]
@@ -183,6 +183,8 @@ module.exports = (options) => ({
     ]
   },
   plugins: options.plugins.concat([
+      // create css bundle
+    new ExtractTextPlugin({filename: options.isProd ? 'css/[name]-[contenthash].css' : 'css/[name].css', allChunks: true}),
     new webpack.ProvidePlugin({
       // make fetch available
       fetch: 'exports-loader?self.fetch!whatwg-fetch'
@@ -203,7 +205,8 @@ module.exports = (options) => ({
     extensions: [
       '.js',
       '.jsx',
-      '.react.js'
+      '.react.js',
+      '.scss'
     ],
     mainFields: [
       'browser',

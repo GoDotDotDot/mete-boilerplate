@@ -8,57 +8,18 @@
 
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import styled from 'styled-components'
-import { Switch, Route } from 'react-router-dom'
 
-import nav from '../../common/nav'
-// import HomePage from 'containers/HomePage/Loadable'
-// import FeaturePage from 'containers/FeaturePage/Loadable'
-import NotFoundPage from 'containers/NotFoundPage/Loadable'
-import Header from 'components/Header'
-import Footer from 'components/Footer'
+import AppLayout from '../../app.layout'
 
-const AppWrapper = styled.div`
-  max-width: calc(768px + 16px * 2);
-  margin: 0 auto;
-  display: flex;
-  min-height: 100%;
-  padding: 0 16px;
-  flex-direction: column;
-`
-
-const getRoute = nav => {
-  return nav.map(ele => {
-    if (ele.child) {
-      return this.getRoute(ele.child)
-    }
-    if (ele.component) {
-      return (
-        <Route
-          key={ele.route}
-          exact
-          path={ele.route}
-          component={ele.component}
-        />
-      )
-    }
-  })
-}
 export default function App () {
   return (
-    <AppWrapper>
+    <AppLayout>
       <Helmet
         titleTemplate='%s - React.js Boilerplate'
         defaultTitle='React.js Boilerplate'
       >
         <meta name='description' content='A React.js Boilerplate application' />
       </Helmet>
-      <Header />
-      <Switch>
-        {getRoute(nav)}
-        <Route path='' component={NotFoundPage} />
-      </Switch>
-      <Footer />
-    </AppWrapper>
+    </AppLayout>
   )
 }

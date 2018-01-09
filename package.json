@@ -54,13 +54,14 @@
     "webpack-hot-middleware": "^2.21.0"
   },
   "dependencies": {
-    "antd": "^2.13.10",
+    "antd": "^3.1.1",
     "axios": "^0.17.1",
     "es6-promise": "^4.1.1",
     "eventsource-polyfill": "^0.9.6",
     "exports-loader": "^0.6.4",
     "express": "^4.16.2",
     "fontfaceobserver": "^2.0.13",
+    "history": "^4.7.2",
     "intl": "^1.2.5",
     "offline-plugin": "^4.9.0",
     "react": "^16.2.0",

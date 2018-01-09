@@ -2,8 +2,8 @@
 // lazyload components here
 import React from 'react'
 
-import HomePage from 'bundle-loader?lazy&name=Home!containers/HomePage'
-import FeaturePage from 'bundle-loader?lazy&name=Sub1!containers/FeaturePage'
+import HomePage from 'bundle-loader?lazy&name=Home!pages/Home'
+import FeaturePage from 'bundle-loader?lazy&name=Sub1!pages/Feature'
 
 import Bundle from '../components/Lazyload'
 const DefaultLoading = () => <div style={{height: '100vh', backgroundColor: '#333'}}>正在加载</div>

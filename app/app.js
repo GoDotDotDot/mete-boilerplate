@@ -14,11 +14,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import FontFaceObserver from 'fontfaceobserver';
-import createHistory from 'history/createBrowserHistory';
-import 'sanitize.css/sanitize.css';
+import history from './common/history'
+// import 'sanitize.css/sanitize.css';
 
 // Import root app
-import App from 'containers/App';
+import App from './app.layout';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -47,7 +47,7 @@ import configureStore from './configureStore';
 import { translationMessages } from './i18n';
 
 // Import CSS reset and Global Styles
-import './global-styles';
+// import './global-styles';
 
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
@@ -62,16 +62,16 @@ openSansObserver.load().then(() => {
 
 // Create redux store with history
 const initialState = {};
-const history = createHistory();
+
 const store = configureStore(initialState, history);
-const MOUNT_NODE = document.getElementById('app');
+const MOUNT_NODE = document.getElementById('root');
 
 const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
       <LanguageProvider messages={messages}>
         <ConnectedRouter history={history}>
-          <App />
+          <App/>
         </ConnectedRouter>
       </LanguageProvider>
     </Provider>,
@@ -83,7 +83,7 @@ if (module.hot) {
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
-  module.hot.accept(['./i18n', 'containers/App'], () => {
+  module.hot.accept(['./i18n', './app.layout'], () => {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     render(translationMessages);
   });
