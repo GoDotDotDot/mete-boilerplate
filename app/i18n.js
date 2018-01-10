@@ -6,19 +6,19 @@
  */
 import { addLocaleData } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-import deLocaleData from 'react-intl/locale-data/de'
+import zhCnLocaleData from 'react-intl/locale-data/zh'
 
 import { DEFAULT_LOCALE } from '../app/containers/App/constants'
 
 import enTranslationMessages from './translations/en.json'
-import deTranslationMessages from './translations/de.json'
+import zhCnTranslationMessages from './translations/zh-cn.json'
 
 addLocaleData(enLocaleData)
-addLocaleData(deLocaleData)
+addLocaleData(zhCnLocaleData)
 
 export const appLocales = [
   'en',
-  'de'
+  'zh-cn'
 ]
 
 export const formatTranslationMessages = (locale, messages) => {
@@ -35,5 +35,5 @@ export const formatTranslationMessages = (locale, messages) => {
 
 export const translationMessages = {
   en: formatTranslationMessages('en', enTranslationMessages),
-  de: formatTranslationMessages('de', deTranslationMessages)
+  'zh-cn': formatTranslationMessages('zh-cn', zhCnTranslationMessages)
 }
