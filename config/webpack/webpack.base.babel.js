@@ -142,13 +142,14 @@ module.exports = (options) => ({
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
-            loader: 'url-loader?limit=8024&name=assets/images/[name]-[hash].[ext]',
+            loader: 'url-loader?limit=8024&',
             options: {
-              publicPath: '/'
+              limit:'8024',
+              name:'[name]-[hash].[ext]',
+              publicPath: '/',
+              outputPath: 'assets/images'
             }
           },
-          // 'file-loader',
-
           {
             loader: 'image-webpack-loader',
             options: {
