@@ -1,4 +1,5 @@
 {
   "app.pages.HomePage.search": "搜索",
-  "app.pages.HomePage.message": "搜索Input框中输入的用户的Github仓库。"
+  "app.pages.HomePage.message": "搜索Input框中输入的用户的Github仓库。",
+  "app.pages.HomePage.errorMsg" : "没有找到您要搜索的库！"
 }

@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { FormattedMessage } from 'react-intl'
 import messages from 'messages/home'
-// import { createStructuredSelector } from 'reselect'
-import homeReducer from "reducers/home";
-import saga from "sagas/home";
+import { createStructuredSelector } from 'reselect'
+import { searchUsersGithubRepo ,changeUsername} from "@redux/actions/home";
+import homeReducer from "@redux/reducers/home";
+import saga from "@redux/sagas/home";
+import {makeSelectUsername, makeSelectRepos, makeSelectLoading, makeSelectError } from "@redux/selectors/home";
 import injectReducer from "utils/injectReducer";
 import injectSaga from "utils/injectSaga";
-import { searchUsersGithubRepo ,changeUsername} from "actions/home";
 import { Input, Button, List, Spin, Icon } from "antd";
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -23,7 +24,7 @@ class HomePage extends Component {
     dispatch && dispatch(changeUsername(value));
   };
   render() {
-    const { name,repoData,loading } = this.props;
+    const { name,repoData,loading,error } = this.props;
     
     return (
       <div>
@@ -39,30 +40,29 @@ class HomePage extends Component {
         {(t)=><div>{t}</div>}
         </FormattedMessage>
         <Spin indicator={antIcon} style={{paddingTop:30,width:'100%'}} spinning={loading}>
-        {repoData && 
+        {repoData && !error &&
         <List
           bordered
           dataSource={repoData}
           renderItem={item => (<List.Item> <a target='_blank' href={item.html_url}>{item.full_name}</a> </List.Item>)}
         />}
+        {error && <FormattedMessage {...messages.errorMsg}/>}
         </Spin>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  const name = state.get('home2').get("name");
-  const repoData = state.get('home2').get("repoData");
-  const loading = state.get('home2').get("loading");
-  // const username = state.get('home').get("username");
-  // console.log('mapStateToProps-username:',username)
-  return {name,repoData,loading};
-};
+const mapStateToProps = createStructuredSelector({
+  name: makeSelectUsername(),
+  repoData: makeSelectRepos(),
+  loading: makeSelectLoading(),
+  error: makeSelectError()
+})
 
 const withConnect = connect(mapStateToProps);
-const withReducer = injectReducer({ key: "home2", reducer: homeReducer });
-const withSaga = injectSaga({ key: 'home2', saga })
+const withReducer = injectReducer({ key: "home", reducer: homeReducer });
+const withSaga = injectSaga({ key: 'home', saga })
 
 export default compose(
   withReducer,

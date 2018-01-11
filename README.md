@@ -17,5 +17,3 @@ react development environment, inspired by [react-boilerplate](https://github.co
 - [ ] [i18n](https://github.com/yahoo/react-intl)
 
 updating...
-
-[![Build Status][travis-badge]][travis]

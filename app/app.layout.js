@@ -121,7 +121,7 @@ class AppLayout extends React.Component {
           </Sider>
           <Layout>
             <Header style={{ background: "#fff", padding: 0,boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)'}} >
-            <Select value={this.props.locale} onChange={this.languageChangeHandle}>
+            <Select value={this.props.locale} onChange={this.languageChangeHandle} style={{float:'right',transform:'translate(-20px,50%)'}}>
               <Option value="en">English</Option>
               <Option value="zh-cn">简体中文</Option>
             </Select>
@@ -132,7 +132,7 @@ class AppLayout extends React.Component {
               </div>
             </Content>
             <Footer style={{ textAlign: "center" }}>
-              Mete Design ©2017 Created By Mete Design Group
+              Mete Design ©2017 Created By Mete Design Group | More Be Found In <a href="https://github.com/GoDotDotDot/mete-boilerplate">Github</a>
             </Footer>
           </Layout>
         </Layout>
