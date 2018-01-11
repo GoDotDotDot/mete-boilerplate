@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { changeLocale } from 'containers/LanguageProvider/actions';
+import { changeLocale } from '@redux/containers/LanguageProvider/actions';
 
 import { Layout, Menu, Icon,Select } from "antd";
 import nav from "./common/nav";

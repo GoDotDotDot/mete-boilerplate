@@ -8,13 +8,15 @@ import { addLocaleData } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import zhCnLocaleData from 'react-intl/locale-data/zh'
 
-import { DEFAULT_LOCALE } from '../app/containers/App/constants'
+// import { DEFAULT_LOCALE } from '../app/containers/App/constants'
 
 import enTranslationMessages from './translations/en.json'
 import zhCnTranslationMessages from './translations/zh-cn.json'
 
 addLocaleData(enLocaleData)
 addLocaleData(zhCnLocaleData)
+
+const DEFAULT_LOCALE = 'en'
 
 export const appLocales = [
   'en',
