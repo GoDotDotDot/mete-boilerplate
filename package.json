@@ -7,7 +7,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "dev": "cross-env NODE_ENV=development node server",
-    "build:dll": "cross-env node ./scripts/dll.js"
+    "build:dll": "cross-env node ./scripts/dll.js",
+    "start:prod": "cross-env NODE_ENV=production node server"    
   },
   "author": "KUICHU",
   "babel": {
