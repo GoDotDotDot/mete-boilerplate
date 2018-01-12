@@ -9,7 +9,7 @@ import nav from "./common/nav";
 import createBrowserHistory from "history/createBrowserHistory";
 // 建议使用BrowserRouter，这里为了配合使用history而采用Router
 // BrowserRouter first,here is for history via Router component.
-import {Router, Route, Link, NavLink } from "react-router-dom";
+import {HashRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import history from './common/history'
 import './common/global.scss'
 
@@ -88,7 +88,8 @@ class AppLayout extends React.Component {
     dispatch && dispatch(changeLocale(value))
   }
   render() {
-    const {pathname} = history.location
+    const {pathname,hash} = history.location
+    const noPrefixHash = hash.replace(/\#/,'')
     return (
       <Router history={history}>
         <Layout style={{height:'100%'}}>
@@ -104,7 +105,7 @@ class AppLayout extends React.Component {
             <div className="logo">
               <h1>METE DESIGN ADMIN</h1> 
             </div>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={getDefaultSelectedKeys(pathname)} defaultOpenKeys={[pathname]} className='menu'>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={getDefaultSelectedKeys(noPrefixHash)} defaultOpenKeys={[noPrefixHash]} className='menu'>
               {this.getMenuItem(nav)}
             </Menu>
           </Sider>
