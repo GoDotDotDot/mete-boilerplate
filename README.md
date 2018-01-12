@@ -6,16 +6,85 @@ demo site:[https://godotdotdot.github.io/mete-boilerplate/](https://godotdotdot.
 
 [![](https://travis-ci.org/GoDotDotDot/mete-boilerplate.svg?branch=master)](https://travis-ci.org/GoDotDotDot/mete-boilerplate) 
 
+## Getting Started
 
-## Tech Stack
+### Installation
 
-- [ ] [React](https://facebook.github.io/react/)
-- [ ] [React Router](https://github.com/ReactTraining/react-router)
-- [ ] [Redux](http://redux.js.org/)
-- [ ] [Redux Saga](https://redux-saga.github.io/redux-saga/)
-- [ ] [Reselect](https://github.com/reactjs/reselect)
-- [ ] [ImmutableJS](https://facebook.github.io/immutable-js/)
-- [ ] [Styled Components](https://github.com/styled-components/styled-components)
-- [ ] [i18n](https://github.com/yahoo/react-intl)
+```shell
+$ npm install 
+or
+$ yarn
+```
 
-updating...
+### Development Environment
+
+Before starting your project, you should run `npm run build:dll` for building dll files! Otherwise, you will get the following error message.
+
+```shell
+The following Webpack DLL manifest is missing: react_vendor_manifest.json
+Expected to find it in /Volumes/Mac2/CHUKUI/PROJECTS/mete-boilerplate/dll
+Please run: npm run build:dll
+```
+
+```Shell
+$ npm run dev
+```
+
+### Production Environment
+
+```Shell
+$ npm run build
+```
+
+### DLL Build
+
+```shell
+$ npm run build:dll
+```
+
+## Project Structure
+
+- You will write your app in the `app` folder. This is the folder you will spend most.
+- The `server` folder contains development and production server configuration files.
+- ...
+
+```scheme
+--app
+  |--@redux-----------------------------redux相关文件夹
+  |--asserts----------------------------静态文件
+     |--images--------------------------图片
+  |--commom-----------------------------公共文件(css、nav等等)
+  |--components-------------------------组件
+  |--messages---------------------------i18n所需的message
+  |--pages------------------------------路由页面
+  |--template---------------------------模板文件
+  |--tests------------------------------单元测试
+  |--translations-----------------------i18n翻译文件
+  |--utils------------------------------工具文件
+  |--app.js-----------------------------入口文件
+  |--app.layout.js----------------------视图文件
+  |--configureStore.js------------------redux配置的store，包含依赖注入
+  |--i18n.js----------------------------i18n
+  |--manifest.json----------------------清单文件
+  |--reducers.js------------------------reducer注入的地方
+  |--thenm.less-------------------------antd所需的主题文件
+--build---------------------------------生产模式打包的文件
+--config--------------------------------配置文件夹
+  |--webpack----------------------------webpack配置文件
+--dll-----------------------------------动态链接库文件，仅开发阶段使用
+--scripts-------------------------------脚本文件
+--server--------------------------------服务端启动的地方，可以注入api等，也是开发模式启动的地方
+--.browserslistrc-----------------------浏览器列表，用于autoprefixer
+--.gitignore----------------------------github忽略文件
+--.travis.yml---------------------------ci配置文件
+--LICENSE-------------------------------证书
+--README.md
+--config.js-----------------------------辅助配置文件，用于替代package.json文件中的相关配置
+--package.json--------------------------包文件
+--postcss.config.js---------------------postcss
+```
+
+
+
+
+
