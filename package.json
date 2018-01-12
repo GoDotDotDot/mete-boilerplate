@@ -106,6 +106,7 @@
   "dependencies": {
     "antd": "^3.1.1",
     "axios": "^0.17.1",
+    "chalk": "^2.3.0",
     "compression": "^1.7.1",
     "es6-promise": "^4.1.1",
     "eventsource-polyfill": "^0.9.6",
