@@ -19,15 +19,16 @@ const logger = {
   appStarted: (port, host, tunnelStarted) => {
     // chalk.yellowBright(' Best wishes!')
     console.log(chalk.bgBlackBright(`${chalk.green('This is a special version for little fairy!')} ${chalk.yellowBright(' Best wishes!')}`))
-    console.log(`More be found: ${chalk.blue(`${chalk.italic('https://github.com/GoDotDotDot/mete-boilerplate/tree/special')}`)}`)
+    console.log(`More be found: ${chalk.blue(`${chalk.italic('https://github.com/GoDotDotDot/mete-boilerplate/tree/special')}`)}
+    `)
+
     console.log(`Server started ! ${chalk.green('✓')}`)
     // If the tunnel started, log that and the URL it's available at
     if (tunnelStarted) {
       console.log(`Tunnel initialised ${chalk.green('✓')}`)
     }
 
-    console.log(`
-      ${chalk.bold('Access URLs:')}${divider}
+    console.log(`${chalk.bold('Access URLs:')}${divider}
       Localhost: ${chalk.magenta(`http://${host}:${port}`)}
             LAN: ${chalk.magenta(`http://${ip.address()}:${port}`) +
       (tunnelStarted ? `\n    Proxy: ${chalk.magenta(tunnelStarted)}` : '')}${divider}
