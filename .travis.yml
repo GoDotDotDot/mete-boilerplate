@@ -32,7 +32,7 @@ deploy:
   provider: pages
   skip-cleanup: false
   github-token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure
-  keep-history: true
+  keep-history: false
   local_dir: build
   on:
     branch: master
