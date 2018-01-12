@@ -8,12 +8,18 @@
     "build": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "dev": "cross-env NODE_ENV=development node server",
     "build:dll": "cross-env node ./scripts/dll.js",
-    "start:prod": "cross-env NODE_ENV=production node server"    
+    "start:prod": "cross-env NODE_ENV=production node server"
   },
   "author": "KUICHU",
   "babel": {
     "plugins": [
-      ["import", { "libraryName": "antd", "style": true }],
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "style": true
+        }
+      ],
       "styled-components"
     ],
     "presets": [
@@ -100,7 +106,8 @@
   "dependencies": {
     "antd": "^3.1.1",
     "axios": "^0.17.1",
-    "compression": "^1.7.1",    
+    "chalk": "^2.3.0",
+    "compression": "^1.7.1",
     "es6-promise": "^4.1.1",
     "eventsource-polyfill": "^0.9.6",
     "exports-loader": "^0.6.4",
