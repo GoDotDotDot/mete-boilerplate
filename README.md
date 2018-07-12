@@ -2,6 +2,8 @@
 react development environment, inspired by [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) and [dvajs
 ](https://github.com/dvajs/dva).
 
+**该版本去除了Imutable和reselector**
+
 demo site:[https://godotdotdot.github.io/mete-boilerplate/](https://godotdotdot.github.io/mete-boilerplate/)
 
 [![](https://travis-ci.org/GoDotDotDot/mete-boilerplate.svg?branch=master)](https://travis-ci.org/GoDotDotDot/mete-boilerplate) 
