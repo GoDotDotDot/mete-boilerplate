@@ -1,4 +1,19 @@
-# mete-boilerplate
+<div align="center">
+
+  <!-- replace with accurate logo e.g from https://worldvectorlogo.com/ -->
+
+  
+
+  </a>
+
+  <h1>mete-boilerplate</h1>
+
+</div>
+
+react development environment, inspired by react-boilerplate and [dvajs
+
+](https://github.com/dvajs/dva).
+
 react development environment, inspired by [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) and [dvajs
 ](https://github.com/dvajs/dva).
 
