@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+
 const workPath = process.cwd()
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
@@ -32,7 +33,6 @@ module.exports = require('./webpack.base.babel')({
     //   minChunks: 2,
     //   async: true
     // }),
-
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/templates/index.pro.html',
