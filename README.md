@@ -1,6 +1,14 @@
-# mete-boilerplate
+<div align="center">
+  <!-- replace with accurate logo e.g from https://worldvectorlogo.com/ -->
+  <img width="200" height="200" src="https://cdn.rawgit.com/standard/standard/master/sticker.svg">
+  </a>
+  <h1>mete-boilerplate</h1>
+</div>
+
 react development environment, inspired by [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) and [dvajs
 ](https://github.com/dvajs/dva).
+
+**该版本去除了reselector**
 
 demo site:[https://godotdotdot.github.io/mete-boilerplate/](https://godotdotdot.github.io/mete-boilerplate/)
 

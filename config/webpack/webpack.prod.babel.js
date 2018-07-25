@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const OfflinePlugin = require('offline-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+
 const workPath = process.cwd()
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
@@ -17,6 +18,7 @@ module.exports = require('./webpack.base.babel')({
     chunkFilename: 'js/[id]-[chunkhash].bundle.js',
     publicPath: './'
   },
+  mode: 'production',
 
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
@@ -24,16 +26,16 @@ module.exports = require('./webpack.base.babel')({
       root: workPath
     }),
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      children: true,
-      minChunks: 2,
-      async: true
-    }),
-
+    // webpack 4 auto load optimization.splitChunks
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   children: true,
+    //   minChunks: 2,
+    //   async: true
+    // }),
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
-      template: 'app/templates/index.html',
+      template: 'app/templates/index.pro.html',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -49,18 +51,18 @@ module.exports = require('./webpack.base.babel')({
       inject: true
     }),
   // minify remove some of the dead code
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        conditionals: true,
-        unused: true,
-        comparisons: true,
-        sequences: true,
-        dead_code: true,
-        if_return: true,
-        join_vars: true
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false,
+    //     conditionals: true,
+    //     unused: true,
+    //     comparisons: true,
+    //     sequences: true,
+    //     dead_code: true,
+    //     if_return: true,
+    //     join_vars: true
+    //   }
+    // }),
     // Put it in the end to capture all the HtmlWebpackPlugin's
     // assets manipulations and do leak its manipulations to HtmlWebpackPlugin
     new OfflinePlugin({
@@ -89,6 +91,28 @@ module.exports = require('./webpack.base.babel')({
 
   performance: {
     assetFilter: (assetFilename) => !(/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename))
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
   },
   isProd: true
 

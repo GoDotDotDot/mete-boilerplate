@@ -5,7 +5,8 @@
 const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
 // see https://github.com/webpack/loader-utils/issues/56 parseQuery() will be replaced with getOptions()
@@ -44,15 +45,12 @@ module.exports = (options) => ({
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [{
+        use: [
+          MiniCssExtractPlugin.loader, {
             loader: 'css-loader',
             options: {
               minimize: options.isProd
-            }}, 'postcss-loader'],
-          publicPath: '/'
-        })
+            }}, 'postcss-loader']
       },
       {
         // Preprocess 3rd party .css files located in node_modules
@@ -64,73 +62,61 @@ module.exports = (options) => ({
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          publicPath: '/',
-          fallback: 'style-loader',
-          use: [
-            // {loader: 'autoprefixer-loader'},
-            {
-              loader: 'css-loader',
-              options: {
-                // module: true, // css-loader 0.14.5 compatible
-                // modules: true
-                // localIdentName: '[hash:base64:5]'
-                // importLoaders: 1,
-                minimize: options.isProd
-              }
-            },
-            {
-              loader: 'postcss-loader'
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                // outputStyle: 'collapsed',
-                sourceMap: true,
-                includePaths: ['app']
-              }
-            }
-          ]
-        })
-      },
-      // less loader
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          publicPath: '/',
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
+        use: [
+          // {loader: 'autoprefixer-loader'},
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
               // module: true, // css-loader 0.14.5 compatible
               // modules: true
               // localIdentName: '[hash:base64:5]'
               // importLoaders: 1,
-                minimize: options.isProd
-              }
-            },
-            {
-              loader: 'postcss-loader'
-            },
-            {
-              loader: 'less-loader',
-              options: {
-              // outputStyle: 'collapsed',
-                modifyVars: themeVariables,
-                sourceMap: true,
-                includePaths: [path.resolve(workingPath, 'app')]
-              }
+              minimize: options.isProd
             }
-          ]
-        })
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              // outputStyle: 'collapsed',
+              sourceMap: true,
+              includePaths: ['app']
+            }
+          }
+        ]
       },
-      // {
-      //   // Preprocess 3rd party .css files located in node_modules
-      //   test: /\.css$/,
-      //   include: /node_modules/,
-      //   use: ['style-loader', 'css-loader']
-      // },
+      // less loader
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+            // module: true, // css-loader 0.14.5 compatible
+            // modules: true
+            // localIdentName: '[hash:base64:5]'
+            // importLoaders: 1,
+              minimize: options.isProd
+            }
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+            // outputStyle: 'collapsed',
+              modifyVars: themeVariables,
+              sourceMap: true
+              // includePaths: [path.resolve(workingPath, 'app')]
+            }
+          }
+        ]
+      },
       {
         test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
         loader: 'url-loader?limit=8024&name=assets/fonts/[name].[ext]',
@@ -139,13 +125,13 @@ module.exports = (options) => ({
         }
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg|gif|ico)$/,
         use: [
           {
             loader: 'url-loader?limit=8024&',
             options: {
-              limit:'8024',
-              name:'[name]-[hash].[ext]',
+              limit: '8024',
+              name: '[name]-[hash].[ext]',
               publicPath: '/',
               outputPath: 'assets/images'
             }
@@ -153,12 +139,25 @@ module.exports = (options) => ({
           {
             loader: 'image-webpack-loader',
             options: {
-              progressive: true,
-              optimizationLevel: 7,
-              interlaced: false,
+              disable: !options.isProd,
+              mozjpeg: {
+                progressive: true,
+                quality: 65
+              },
+              // optipng.enabled: false will disable optipng
+              optipng: {
+                enabled: true
+              },
               pngquant: {
                 quality: '65-90',
                 speed: 4
+              },
+              gifsicle: {
+                interlaced: true
+              },
+              // the webp option will enable WEBP
+              webp: {
+                quality: 75
               }
             }
           }
@@ -167,10 +166,6 @@ module.exports = (options) => ({
       {
         test: /\.html$/,
         use: 'html-loader'
-      },
-      {
-        test: /\.json$/,
-        use: 'json-loader'
       },
       {
         test: /\.(mp4|webm)$/,
@@ -183,9 +178,10 @@ module.exports = (options) => ({
       }
     ]
   },
+  mode: options.mode || 'development',
   plugins: options.plugins.concat([
       // create css bundle
-    new ExtractTextPlugin({filename: options.isProd ? 'css/[name]-[contenthash].css' : 'css/[name].css', allChunks: true}),
+    new MiniCssExtractPlugin({filename: options.isProd ? 'css/[name]-[contenthash].css' : 'css/[name].css'}),
     new webpack.ProvidePlugin({
       // make fetch available
       fetch: 'exports-loader?self.fetch!whatwg-fetch'
