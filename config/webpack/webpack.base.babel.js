@@ -132,8 +132,8 @@ module.exports = (options) => ({
             options: {
               limit: '8024',
               name: '[name]-[hash].[ext]',
-              publicPath: '/',
-              outputPath: 'assets/images'
+              publicPath: '/assets/images/', // 打包显示的地址
+              outputPath: 'assets/images' // 打包过后文件放置的地址
             }
           },
           {
