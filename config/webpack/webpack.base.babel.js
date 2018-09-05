@@ -132,7 +132,7 @@ module.exports = (options) => ({
             options: {
               limit: '8024',
               name: '[name]-[hash].[ext]',
-              publicPath: '/',
+              publicPath: '/assets/images/',
               outputPath: 'assets/images'
             }
           },
