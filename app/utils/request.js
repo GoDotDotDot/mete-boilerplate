@@ -44,7 +44,7 @@ const defaultOptions = {
   headers: {
     'Content-Type': 'application/json',
   },
-  credentials: 'include', // 跨域传递cookie
+  //credentials: 'include', // 跨域传递cookie
 };
 
 /**
