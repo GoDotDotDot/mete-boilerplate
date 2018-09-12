@@ -1,4 +1,4 @@
-import 'isomorphic-fetch'
+import 'isomorphic-fetch';
 
 /**
  * Parses the JSON returned by a network request
@@ -7,11 +7,13 @@ import 'isomorphic-fetch'
  *
  * @return {object}          The parsed JSON from the request
  */
-function parseJSON (response) {
-  if (response.status === 204 || response.status === 205) {
-    return null
+function parseJSON(response) {
+  const { status } = response;
+  if (status === 204 || status === 205) {
+    return null;
   }
-  return response.json()
+
+  return response.json();
 }
 
 /**
@@ -21,14 +23,29 @@ function parseJSON (response) {
  *
  * @return {object|undefined} Returns either the response, or throws an error
  */
-function checkStatus (response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response
+function checkStatus(response) {
+  const { status } = response;
+  if (status >= 200 && status < 300) {
+    return response;
   }
-  const error = new Error(response.statusText)
-  error.response = response
-  throw error
+  // 权限不允许则跳转到登陆页面
+  if (status === 403 || status === 401) {
+    // window ? (window.location = '/login.html') : null;
+  }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 }
+/**
+ * @description 默认配置
+ * 设置请求头为json
+ */
+const defaultOptions = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  credentials: 'include', // 跨域传递cookie
+};
 
 /**
  * Requests a URL, returning a promise
@@ -38,8 +55,28 @@ function checkStatus (response) {
  *
  * @return {object}           The response data
  */
-export default function request (url, options) {
-  return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON)
+export default function request(url, options = {}) {
+  return new Promise((resolve, reject) => {
+    const headers = { ...defaultOptions.headers, ...options.headers };
+    //   if (window.userInfo) {
+    //     window.userInfo.stationId && (headers['X-Station-Id'] = window.userInfo.stationId)
+    //   }
+    let abortId;
+    if (options.timeout) {
+      abortId = setTimeout(() => {
+        reject(new Error('timeout!'));
+      }, options.timeout || 6000);
+    }
+    fetch(url, { ...defaultOptions, ...options, headers })
+      .then(checkStatus)
+      .then(parseJSON)
+      .then((res) => {
+        clearTimeout(abortId);
+        resolve(res);
+      })
+      .catch((e) => {
+        clearTimeout(abortId);
+        reject(e);
+      });
+  });
 }
