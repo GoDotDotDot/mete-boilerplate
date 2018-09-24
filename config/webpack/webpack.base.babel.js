@@ -24,6 +24,8 @@ module.exports = (options) => ({
     path: path.resolve(workingPath, 'build'),
     publicPath: '/'
   }, options.output), // Merge with env dependent settings
+  optimization: options.optimization,
+
   module: {
     rules: [
       {
@@ -33,7 +35,7 @@ module.exports = (options) => ({
           loader: 'babel-loader',
           options:
           Object.assign({
-            presets: [['es2015', { 'modules': false }], 'react', 'stage-0'],
+            presets: [['env', { 'modules': false }], 'react', 'stage-0'],
             cacheDirectory: true,
           // Since babel-plugin-transform-runtime includes a polyfill that includes a custom regenerator runtime and core.js, the following usual shimming method using webpack.ProvidePlugin will not work:
             plugins: [

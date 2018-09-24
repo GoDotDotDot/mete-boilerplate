@@ -4,72 +4,27 @@
   "description": "react development env",
   "main": "index.js",
   "scripts": {
+    "analyze": "webpack --config config/webpack/webpack.prod.babel.js --profile --json > stats.json",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "build": "cross-env NODE_ENV=production webpack --profile --config config/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "dev": "cross-env NODE_ENV=development node server",
     "build:dll": "cross-env node ./scripts/dll.js",
     "start:prod": "cross-env NODE_ENV=production node server",
-    "stats":"cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --profile --json > stats.json"
+    "stats": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --profile --json > stats.json"
   },
   "sideEffects": [
     "*.css"
   ],
   "author": "KUICHU",
-  "babel": {
-    "plugins": [
-      [
-        "import",
-        {
-          "libraryName": "antd",
-          "style": true
-        }
-      ],
-      "styled-components"
-    ],
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false
-        }
-      ],
-      "react",
-      "stage-0"
-    ],
-    "env": {
-      "production": {
-        "only": [
-          "app"
-        ],
-        "plugins": [
-          "transform-react-remove-prop-types"
-        ]
-      },
-      "test": {
-        "plugins": [
-          "transform-es2015-modules-commonjs",
-          "dynamic-import-node"
-        ]
-      }
-    }
-  },
   "license": "MIT",
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.1",
     "babel-core": "^6.25.0",
     "babel-jest": "^22.0.4",
     "babel-loader": "^7.1.1",
-    "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-import": "^1.6.2",
-    "babel-plugin-styled-components": "^1.4.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "babel-plugin-transform-react-constant-elements": "^6.23.0",
-    "babel-plugin-transform-react-inline-elements": "^6.22.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
-    "babel-preset-es2015-native-modules": "^6.9.4",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-runtime": "^6.23.0",
@@ -119,6 +74,7 @@
     "express": "^4.16.2",
     "fontfaceobserver": "^2.0.13",
     "history": "^4.7.2",
+    "immutable": "^3.8.2",
     "intl": "^1.2.5",
     "isomorphic-fetch": "^2.2.1",
     "mini-css-extract-plugin": "^0.4.1",
