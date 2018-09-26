@@ -33,15 +33,7 @@ module.exports = (options) => ({
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options:
-          Object.assign({
-            presets: [['env', { 'modules': false }], 'react', 'stage-0'],
-            cacheDirectory: true,
-          // Since babel-plugin-transform-runtime includes a polyfill that includes a custom regenerator runtime and core.js, the following usual shimming method using webpack.ProvidePlugin will not work:
-            plugins: [
-              ['import', { libraryName: 'antd', style: true }] // `style: true` 会加载 less 文件
-            ]
-          }, options.babelQuery)
+          options: options.babelQuery
         }
       },
       {
