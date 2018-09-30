@@ -1,5 +1,0 @@
-{
-  "app.pages.HomePage.search": "Search",
-  "app.pages.HomePage.message": "search user's github repo with the input value you typed by click search button.",
-  "app.pages.HomePage.errorMsg" : "Not Found!"
-}

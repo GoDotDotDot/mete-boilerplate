@@ -1,41 +1,45 @@
-/**
- * i18n.js
- *
- * This will setup the i18n language files and locale data for your app.
- *
- */
-import { addLocaleData } from 'react-intl'
-import enLocaleData from 'react-intl/locale-data/en'
-import zhCnLocaleData from 'react-intl/locale-data/zh'
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { reactI18nextModule } from "react-i18next";
 
-// import { DEFAULT_LOCALE } from '../app/containers/App/constants'
+const DEFAULT_LOCALE = "zh";
 
-import enTranslationMessages from './translations/en.json'
-import zhCnTranslationMessages from './translations/zh-cn.json'
+i18n
+  .use(LanguageDetector)
+  .use(reactI18nextModule)
+  .init({
+    debug: true,
 
-addLocaleData(enLocaleData)
-addLocaleData(zhCnLocaleData)
+    fallbackLng: DEFAULT_LOCALE,
 
-const DEFAULT_LOCALE = 'en'
+    ns: ["pages", "global"],
+    defaultNS: "pages",
+    interpolation: {
+      escapeValue: false
+    },
+    resources: {
+      en: {
+        pages: require("./locales/en/pages.json"),
+        global: require("./locales/en/global.json")
+      },
+      zh: {
+        pages: require("./locales/zh/pages.json"),
+        global: require("./locales/zh/global.json")
+      }
+    },
+    react: {
+      wait: true
+    }
+  });
 
-export const appLocales = [
-  'en',
-  'zh-cn'
-]
+const changeLang = (lng) => {
+  i18n.changeLanguage(lng);
+};
 
-export const formatTranslationMessages = (locale, messages) => {
-  const defaultFormattedMessages = locale !== DEFAULT_LOCALE
-    ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
-    : {}
-  return Object.keys(messages).reduce((formattedMessages, key) => {
-    const formattedMessage = !messages[key] && locale !== DEFAULT_LOCALE
-      ? defaultFormattedMessages[key]
-      : messages[key]
-    return Object.assign(formattedMessages, { [key]: formattedMessage })
-  }, {})
-}
+const getLang = () => {
+  return i18n.language
+};
 
-export const translationMessages = {
-  en: formatTranslationMessages('en', enTranslationMessages),
-  'zh-cn': formatTranslationMessages('zh-cn', zhCnTranslationMessages)
-}
+export default i18n;
+export { changeLang, getLang };
+

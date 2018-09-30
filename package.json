@@ -1,6 +1,6 @@
 {
-  "name": "mete-boilerplate",
-  "version": "1.0.0",
+  "name": "mete-cli",
+  "version": "2.0.0",
   "description": "react development env",
   "main": "index.js",
   "scripts": {
@@ -65,26 +65,32 @@
     "webpack-hot-middleware": "^2.22.2"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.1.0",
     "@babel/polyfill": "^7.0.0",
     "antd": "^3.1.1",
     "axios": "^0.17.1",
     "chalk": "^2.3.0",
     "compression": "^1.7.1",
+    "cross-spawn": "^6.0.5",
     "es6-promise": "^4.1.1",
     "eventsource-polyfill": "^0.9.6",
     "exports-loader": "^0.6.4",
     "express": "^4.16.2",
     "fontfaceobserver": "^2.0.13",
+    "fs-extra": "^7.0.0",
     "history": "^4.7.2",
+    "i18next": "^11.9.0",
+    "i18next-browser-languagedetector": "^2.2.3",
     "immutable": "^3.8.2",
     "intl": "^1.2.5",
     "isomorphic-fetch": "^2.2.1",
+    "localforage": "^1.7.2",
     "mini-css-extract-plugin": "^0.4.1",
     "offline-plugin": "^5.0.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
-    "react-intl": "^2.4.0",
+    "react-i18next": "^7.13.0",
     "react-loadable": "^5.3.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -94,7 +100,13 @@
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
     "sanitize.css": "^5.0.0",
+    "signale": "^1.3.0",
+    "stats-webpack-plugin": "^0.7.0",
     "styled-components": "^2.4.0"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "dllPlugin": {
     "path": "dll",

@@ -12,6 +12,15 @@ react development environment, inspired by [react-boilerplate](https://github.co
 
 demo site:[https://godotdotdot.github.io/mete-boilerplate/](https://godotdotdot.github.io/mete-boilerplate/)
 
+## Features
+
+- Dynamic Import
+- Code Splitting
+- i18n
+- Decorator Support
+
+
+
 [![](https://travis-ci.org/GoDotDotDot/mete-boilerplate.svg?branch=master)](https://travis-ci.org/GoDotDotDot/mete-boilerplate) 
 
 ## Getting Started

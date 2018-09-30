@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+const path = require("path");
+const spawn = require("cross-spawn").spawn;
+// const  pkg  =  require("../../package.json"; // 相对 dist 文件夹，项目需要打包到dis)t
+const pkg = require("../package.json");
+const CONFIG_FILE = require("../lib/constants").CONFIG_FILE;
+const actionList = require("../lib/bin/action")
+const utils = require('../lib/utils')
+const { join } = path;
+
+if (pkg.peerDependencies) {
+  Object.keys(pkg.peerDependencies).forEach(dependency => {
+    try {
+      // When 'npm link' is used it checks the clone location. Not the project.
+      require.resolve(dependency);
+    } catch (err) {
+      console.warn(
+        `
+        The module '${dependency}' was not found. Mete.js requires that you include it in 'dependencies' of your 'package.json'. 
+        To add it, run 
+          npm install --save ${dependency} 
+          or
+          yarn add ${dependency}
+          `
+      );
+    }
+  });
+}
+
+let meteCli = {};
+const defaultCommand = "dev";
+const commands = {
+  "init": {
+    "description": "Init an new project.",
+  },
+  "build": {
+    "description": "Production build.",
+  },
+  "start": {
+    "description": "Start mete project in production.",
+  },
+  [defaultCommand]: {
+    "description": "Start mete project in development (default).",
+  },
+}
+
+const options = {
+  "--help": {
+    "description": "List usage.",
+    "action": function () {
+      actionList.help(meteCli)
+    }
+  },
+  "-h": {
+    "description": "Same to --help.",
+    "action": function (params) {
+      actionList.help(meteCli)      
+    }
+  },
+  "--version": {
+    "description": "Output current version.",
+    "action": function (params) {
+      
+    }
+  },
+  "-v": {
+    "description": "Same to --version",
+    "action": function (params) {
+      
+    }
+  },
+}
+
+/**
+ * new: init a new project
+ * build: production build
+ * start: start mete project in production
+ * dev: start mete project in development (default)
+ */
+
+let cmd = process.argv[2];
+let args = [];
+let nodeArgs = [];
+
+const inspectArg = process.argv.find(arg => arg.includes("--inspect"));
+if (inspectArg) {
+  nodeArgs.push(inspectArg);
+}
+
+const defaultEnv = cmd === "dev" ? "development" : "production";
+process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv;
+
+const bin = join(__dirname, "mete-" + cmd);
+
+meteCli = {
+  options,
+  commands,
+  nodeArgs,
+  args
+}
+
+// options call
+if (options[cmd]) {
+  options[cmd].action()
+  process.exit(0);
+}
+
+// commands call
+if (commands[cmd]) {
+  args = process.argv.slice(3);
+} else {
+  cmd = defaultCommand;
+  args = process.argv.slice(2);
+}
+
+const startProcess = () => {
+  const proc = spawn("node", [...nodeArgs, ...[bin], ...args], {
+    stdio: "inherit"
+  });
+  utils.clearTerminal()
+  proc.on("close", (code, signal) => {
+    if (code !== null) {
+      process.exit(code);
+    }
+    if (signal) {
+      if (signal === "SIGKILL") {
+        process.exit(137);
+      }
+      console.log(`got signal ${signal}, exiting`);
+      process.exit(signal === "SIGINT" ? 0 : 1);
+    }
+    process.exit(0);
+  });
+  proc.on("error", err => {
+    console.error(err);
+    process.exit(1);
+  });
+  return proc;
+};
+
+let proc = startProcess();
+
+const wrapper = () => {
+  if (proc) {
+    proc.kill();
+  }
+};
+process.on("SIGINT", wrapper);
+process.on("SIGTERM", wrapper);
+process.on("exit", wrapper);
+
+if (cmd === "dev") {
+  const { watchFile } = require("fs");
+  watchFile(`${process.cwd()}/${CONFIG_FILE}`, (cur, prev) => {
+    if (cur.size > 0 || prev.size > 0) {
+      console.log(
+        `\n> Found a change in ${CONFIG_FILE}, restarting the server...`
+      );
+      // Don't listen to 'close' now since otherwise parent gets killed by listener
+      proc.removeAllListeners("close");
+      proc.kill();
+      proc = startProcess();
+    }
+  });
+}

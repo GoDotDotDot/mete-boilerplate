@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { changeLocale } from '@redux/containers/LanguageProvider/actions';
-
+import { translate } from 'react-i18next';
 import { Layout, Menu, Icon,Select } from "antd";
 import nav from "./common/nav";
 import createBrowserHistory from "history/createBrowserHistory";
 // 建议使用BrowserRouter，这里为了配合使用history而采用Router
 // BrowserRouter first,here is for history via Router component.
-import {HashRouter as Router, Route, Link, NavLink } from "react-router-dom";
+import {Router, Route, Link, NavLink } from "react-router-dom";
 import history from './common/history'
+import { changeLang } from './i18n'
 import './common/global.scss'
 
 const Option = Select.Option;
@@ -28,7 +28,8 @@ class AppLayout extends React.Component {
     this.hashChangeHandle = this.hashChangeHandle.bind(this)
   }
   state = {
-    collapsed: false
+    collapsed: false,
+    lng: 'zh'
   };
   hashChangeHandle(){
     window.scrollTo(0, 0);    
@@ -75,15 +76,14 @@ class AppLayout extends React.Component {
       }
       return (
         <Menu.Item key={ele.route}>
-          <Link to={ele.route}>{ele.title}</Link>
+          <Link to={ele.route}>{this.props.t(`menu.${ele.title}`)}</Link>
         </Menu.Item>
       );
     });
   };
-  languageChangeHandle=(value)=>{
-    console.log(`selected ${value}`);
-    const {dispatch} = this.props
-    dispatch && dispatch(changeLocale(value))
+  languageChangeHandle = lng => {
+    changeLang(lng);
+    this.setState({lng})
   }
   render() {
     const {pathname,hash} = history.location
@@ -109,9 +109,9 @@ class AppLayout extends React.Component {
           </Sider>
           <Layout>
             <Header style={{ background: "#fff", padding: 0,boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)'}} >
-            <Select value={this.props.locale} onChange={this.languageChangeHandle} style={{float:'right',transform:'translate(-20px,50%)'}}>
+            <Select value={this.state.lng} onChange={this.languageChangeHandle} style={{float:'right',transform:'translate(-20px,50%)'}}>
               <Option value="en">English</Option>
-              <Option value="zh-cn">简体中文</Option>
+              <Option value="zh">简体中文</Option>
             </Select>
             </Header>
             <Content style={{ margin: "24px 16px 0" }}>
@@ -134,8 +134,10 @@ class AppLayout extends React.Component {
 // };
 
 const mapStateToProps = (state)=>{
-  const locale = state.get('language').get('locale')
-  return {locale}
+  return {locale: 'zh'}
 }
 // changeLocale
-export default connect(mapStateToProps)(AppLayout);
+export default translate('global')(
+  connect(mapStateToProps)(AppLayout)
+) 
+  

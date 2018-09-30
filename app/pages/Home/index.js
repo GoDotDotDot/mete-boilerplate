@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { FormattedMessage } from "react-intl";
-import messages from "messages/home";
 import { createStructuredSelector } from "reselect";
 import { searchUsersGithubRepo, changeUsername } from "@redux/actions/home";
 import homeReducer from "@redux/reducers/home";
@@ -15,9 +13,11 @@ import {
 } from "@redux/selectors/home";
 import injectReducer from "utils/injectReducer";
 import injectSaga from "utils/injectSaga";
+import { translate } from "react-i18next";
 import { Input, Button, List, Spin, Icon } from "antd";
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+
 class HomePage extends Component {
   onSearchClickHandle = () => {
     const { dispatch, name } = this.props;
@@ -29,8 +29,7 @@ class HomePage extends Component {
     dispatch && dispatch(changeUsername(value));
   };
   render() {
-    const { name, repoData, loading, error } = this.props;
-
+    const { name, repoData, loading, error, t } = this.props;
     return (
       <div>
         <Input
@@ -39,11 +38,8 @@ class HomePage extends Component {
           onChange={this.onInputChangeHandle}
         />
         <Button type="primary" icon="search" onClick={this.onSearchClickHandle}>
-          <FormattedMessage {...messages.search} />
+          {t("home.search")} 
         </Button>
-        <FormattedMessage {...messages.message}>
-          {t => <div>{t}</div>}
-        </FormattedMessage>
         <Spin
           indicator={antIcon}
           style={{ paddingTop: 30, width: "100%" }}
@@ -92,8 +88,10 @@ const withConnect = connect(mapStateToProps);
 const withReducer = injectReducer({ key: "home", reducer: homeReducer });
 const withSaga = injectSaga({ key: "home", saga });
 
-export default compose(
-  withReducer,
-  withSaga,
-  withConnect
-)(HomePage);
+export default translate("pages")(
+  compose(
+    withReducer,
+    withSaga,
+    withConnect
+  )(HomePage)
+);

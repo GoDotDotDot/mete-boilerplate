@@ -2,28 +2,19 @@
 // lazyload components here
 import React from 'react'
 
-import HomePage from 'bundle-loader?lazy&name=Home!pages/Home'
-import FeaturePage from 'bundle-loader?lazy&name=Sub1!pages/Feature'
+import HomePage from 'pages/Home/loadable'
+import FeaturePage from 'pages/Feature/loadable'
 
-import Bundle from '../components/Lazyload'
-const DefaultLoading = () => <div style={{height: '100px'}}>正在加载</div>
-const loadComponent = (Component, Loading = DefaultLoading) => () => (
-  <Bundle load={Component}>
-    {
-    (Component) => Component ? <Component /> : <Loading />
-    }
-  </Bundle>
-  )
 const nav = [
   {
-    title: 'Index Page',
+    title: 'home',
     route: '/',
-    component: loadComponent(HomePage)
+    component: HomePage
   },
   {
-    title: 'Page1',
+    title: 'page1',
     route: '/features',
-    component: loadComponent(FeaturePage)
+    component: FeaturePage
 
     // child: [
     //   {

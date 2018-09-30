@@ -2,7 +2,10 @@
     "plugins": [
         "@babel/plugin-syntax-dynamic-import",
         ["import", { "libraryName": "antd", "style": true }],
-        "@babel/plugin-proposal-class-properties"
+        "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-proposal-decorators",{
+          "decoratorsBeforeExport": true
+        }]
     ],
     "presets": [
       [
