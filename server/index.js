@@ -3,7 +3,6 @@
 const express = require("express");
 const chalk = require('chalk');
 const signale = require('signale');
-const ip = require('ip');
 const argv = require("./argv");
 const isDev = process.env.NODE_ENV !== "production";
 const ngrok =
@@ -42,7 +41,7 @@ module.exports = function startServer(
   // ); 
   signale.start(`Starting server in ${dev? 'development': 'production'}...`)
   const app = express();
-  server(app, dev);
+  server(app, dev,port,host);
 
   app.listen(port, host, err => {
     if (err) {
@@ -72,15 +71,6 @@ module.exports = function startServer(
         }
       );
     }
-    uilts.clearTerminal()
-    signale.success('Start success!')
-    console.log(`
-    ${chalk.bold('Access URLs:')}
-         Mode: ${dev ? chalk.yellow('Development') : chalk.green('Production')}
-    Localhost: ${chalk.magenta(`http://${host}:${port}`)}
-          LAN: ${chalk.magenta(`http://${ip.address()}:${port}\n`)+
-    chalk.blue(`
-    Press ${chalk.italic('CTRL-C')} to stop`)}
-    `);
+    chalk.green('✔️ Start server successful!')
   });
 };

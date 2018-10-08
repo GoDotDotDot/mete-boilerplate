@@ -30,6 +30,7 @@ class HomePage extends Component {
   };
   render() {
     const { name, repoData, loading, error, t } = this.props;
+    
     return (
       <div>
         <Input

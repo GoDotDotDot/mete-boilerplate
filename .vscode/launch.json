@@ -4,6 +4,7 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
@@ -26,9 +27,27 @@
             "request": "launch",
             "name": "mete-build",
             "args": [
-                "disttest"
+                "dist"
             ],
             "program": "${workspaceFolder}/bin/mete-build"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "mete-gennerate",
+            "args": [
+                
+            ],
+            "program": "${workspaceFolder}/bin/mete-gennerate"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "mete",
+            "args": [
+                
+            ],
+            "program": "${workspaceFolder}/bin/mete"
         }
     ]
 }

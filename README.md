@@ -19,6 +19,10 @@ demo site:[https://godotdotdot.github.io/mete-boilerplate/](https://godotdotdot.
 - i18n
 - Decorator Support
 
+## TODO:
+- 自动安装缺失依赖
+- 打开浏览器窗口
+- 自动选择端口
 
 
 [![](https://travis-ci.org/GoDotDotDot/mete-boilerplate.svg?branch=master)](https://travis-ci.org/GoDotDotDot/mete-boilerplate) 

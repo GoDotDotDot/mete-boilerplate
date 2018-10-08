@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const path = require("path");
 const spawn = require("cross-spawn").spawn;
+const signale = require('signale');
+
 // const  pkg  =  require("../../package.json"; // 相对 dist 文件夹，项目需要打包到dis)t
 const pkg = require("../package.json");
 const CONFIG_FILE = require("../lib/constants").CONFIG_FILE;
@@ -39,6 +41,9 @@ const commands = {
   "start": {
     "description": "Start mete project in production.",
   },
+  "generate": {
+    "description": "Generate code sinppest"
+  },
   [defaultCommand]: {
     "description": "Start mete project in development (default).",
   },
@@ -72,7 +77,7 @@ const options = {
 }
 
 /**
- * new: init a new project
+ * init: init a new project
  * build: production build
  * start: start mete project in production
  * dev: start mete project in development (default)
@@ -81,6 +86,7 @@ const options = {
 let cmd = process.argv[2];
 let args = [];
 let nodeArgs = [];
+let bin;
 
 const inspectArg = process.argv.find(arg => arg.includes("--inspect"));
 if (inspectArg) {
@@ -90,7 +96,7 @@ if (inspectArg) {
 const defaultEnv = cmd === "dev" ? "development" : "production";
 process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv;
 
-const bin = join(__dirname, "mete-" + cmd);
+
 
 meteCli = {
   options,
@@ -105,19 +111,25 @@ if (options[cmd]) {
   process.exit(0);
 }
 
+
 // commands call
 if (commands[cmd]) {
   args = process.argv.slice(3);
+  bin = join(__dirname, "mete-" + cmd);
 } else {
   cmd = defaultCommand;
   args = process.argv.slice(2);
+  signale.warn(cmd + ' is not support cmmand! we will use mete dev altertive!')
+  bin = join(__dirname, "mete-dev");
 }
+// console.log('mete');
+// console.log(process.argv,bin,args)
 
 const startProcess = () => {
   const proc = spawn("node", [...nodeArgs, ...[bin], ...args], {
     stdio: "inherit"
   });
-  utils.clearTerminal()
+  // utils.clearTerminal()
   proc.on("close", (code, signal) => {
     if (code !== null) {
       process.exit(code);

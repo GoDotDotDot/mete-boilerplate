@@ -9,12 +9,14 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
+
 const logger = require("../../server/logger");
 const pkg = require(path.resolve(process.cwd(), "package.json"));
 const dllPlugin = pkg.dllPlugin;
 
 const hotEntry = [
-  "webpack-hot-middleware/client",
+  // "webpack-hot-middleware/client",
+  path.resolve(__dirname,'../../lib/dev-utils/hot-dev-client.js'),
   "eventsource-polyfill" // Necessary for hot reloading with IE
 ];
 
@@ -51,7 +53,6 @@ if (dllPlugin) {
 module.exports = require("./webpack.base")({
   // Add hot reloading in development
   entry: {
-    vendor: ["react", "react-dom", "react-router-dom"],
     app: [...hotEntry, path.join(process.cwd(), "app/app.js")]
     // login: [ ...hotEntry, path.join(process.cwd(), 'app/pages/Login/index.js') ]
   },

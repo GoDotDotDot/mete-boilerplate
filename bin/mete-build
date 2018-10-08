@@ -45,7 +45,7 @@ if (existsSync(foldername)) {
   }
 }
 
-const {build} = require('../build/webpack');
+const {build} = require('../lib/build-utils/webpack');
 signale.await(`Buildding in to ${foldername}
 `)
 
